@@ -1,59 +1,57 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.UIElements;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float timer = 1f;
-    public float growTime = 0.5f;
+    private float minScale = 1;
+    private float maxScale = 1.2f;
+    private Vector2 _scaleChange;
+    private Vector2 maxSize = new Vector2(1.2f, 1.2f);
+    private float timeElapsed;
+    private float lerpDuration = 3;
+    public GameObject knightOutline;
+    private SpriteRenderer outlineSprite;
 
     private bool _shouldShrink;
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(Grow());
-        _shouldShrink = false;
+        _scaleChange = new Vector2(0.01f, 0.01f);
+        timeElapsed = 0;
+        outlineSprite = knightOutline.GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_shouldShrink)
-            StartCoroutine(Shrink());
+        
     }
 
-    public IEnumerator Grow()
+    private void OnMouseOver()
     {
-        var scale = transform.localScale;
-        Vector2 maxScale = new Vector2(1.2f, 1.2f);
-
-        do
+        if (transform.localScale.x < maxSize.x)
         {
-            transform.localScale = Vector3.Lerp(scale, maxScale, timer / growTime);
-            timer += Time.deltaTime;
-            print("Growing: " + transform.localScale);
-            yield return null;
+            transform.localScale = Vector2.Lerp(transform.localScale, maxSize, Time.deltaTime * 10);
+        }
 
-        } while (timer < growTime);
-
-        timer = 0;
-        _shouldShrink = true;
+        outlineSprite.enabled = true;
     }
 
-    public IEnumerator Shrink()
+    private void OnMouseExit()
     {
+        outlineSprite.enabled = false;
+        StartCoroutine(Shrink());
+    }
+    private IEnumerator Shrink()
+    {
+        float t = 0;
         var scale = transform.localScale;
-        Vector2 minScale = new Vector2(1, 1);
-
         do
         {
-            transform.localScale = Vector3.Lerp(scale, minScale, 0.01f);
-            timer += Time.deltaTime;
-            print("Shrinking: " + transform.localScale);
+            transform.localScale = Vector3.Lerp(scale, new Vector3(1, 1, 1), t);
+            t += 10f * Time.deltaTime;
             yield return null;
-
-        } while (timer < growTime);
+    
+        } while (transform.localScale.x > 1);
     }
 }
