@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    private float minScale = 1;
     private float maxScale = 1.2f;
     private Vector2 _scaleChange;
     private Vector2 maxSize = new Vector2(1.2f, 1.2f);
@@ -24,7 +23,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Debug.Log(Input.GetAxisRaw("Horizontal"));
     }
 
     private void OnMouseOver()
