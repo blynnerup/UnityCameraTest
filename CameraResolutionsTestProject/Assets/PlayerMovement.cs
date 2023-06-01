@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -24,8 +25,19 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         Debug.Log(Input.GetAxisRaw("Horizontal"));
+        // if (Input.GetAxisRaw("Horizontal"))
     }
 
+    private void FixedUpdate()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void Move()
+    {
+        
+    }
+    
     private void OnMouseOver()
     {
         if (transform.localScale.x < maxSize.x)
